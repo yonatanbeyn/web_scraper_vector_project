@@ -31,3 +31,47 @@ source venv/bin/activate
 ID 5: Natural language processing (NLP) is a subfield of linguistics, computer science, ...
 ID 8: The history of NLP generally started in the 1950s...
 ID 3: Techniques used in NLP include parsing, semantic analysis, and...
+
+
+q That quits the pager and returns you to the psql prompt.
+
+🟡 To scroll instead of exit
+While you’re in (END):
+
+Space → next page
+
+Enter → one line down
+
+b → back one page
+
+g → go to top
+
+G → go to bottom
+SELECT id, text_chunk
+FROM document_embeddings
+ORDER BY embedding <#> %s::vector
+LIMIT 3;
+
+SELECT oprname, oprleft::regtype, oprright::regtype
+FROM pg_operator
+WHERE oprname IN ('<#>', '<->');Q
+
+ANN INDEX
+CREATE INDEX ON document_embeddings
+USING ivfflat (embedding vector_cosine_ops)
+WITH (lists = 100);
+
+-- Check data
+SELECT COUNT(*) FROM document_embeddings;
+
+-- Inspect samples
+SELECT id, LEFT(text_chunk, 100)
+FROM document_embeddings
+LIMIT 3;
+
+-- Vector search
+SELECT id, text_chunk
+FROM document_embeddings
+ORDER BY embedding <#> :query_vector::vector
+LIMIT 5;
+
