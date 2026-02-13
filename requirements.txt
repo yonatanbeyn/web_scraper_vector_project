@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+openai==0.28
+psycopg2-binary
+tiktoken
+python-dotenv
+numpy
