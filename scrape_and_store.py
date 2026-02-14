@@ -2,7 +2,7 @@ import os
 import re
 import requests
 from bs4 import BeautifulSoup
-import openai
+from openai import OpenAI
 import psycopg2
 from tiktoken import get_encoding
 from dotenv import load_dotenv
@@ -27,7 +27,8 @@ MAX_TOKENS = 200
 OVERLAP_TOKENS = 50
 ENCODING_NAME = "cl100k_base"  # matches OpenAI models
 
-openai.api_key = OPENAI_API_KEY
+# Initialize OpenAI client
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # ----------------------
 # Helper functions
@@ -85,11 +86,11 @@ for idx, chunk in enumerate(chunks, start=1):
         continue
 
     # Generate embedding
-    response = openai.Embedding.create(
+    response = client.embeddings.create(
         input=chunk,
         model="text-embedding-3-small"
     )
-    vector = response['data'][0]['embedding']  # List of floats
+    vector = response.data[0].embedding  # List of floats
 
     # Insert
     sql = "INSERT INTO document_embeddings (text_chunk, embedding) VALUES (%s, %s) RETURNING id;"
@@ -104,10 +105,10 @@ for idx, chunk in enumerate(chunks, start=1):
 # ----------------------
 query_text = "What is natural language processing?"
 query_text_clean = clean_text(query_text)
-query_embedding = openai.Embedding.create(
+query_embedding = client.embeddings.create(
     input=query_text_clean,
     model="text-embedding-3-small"
-)['data'][0]['embedding']
+).data[0].embedding
 
 sql_query = """
 SELECT id, text_chunk
