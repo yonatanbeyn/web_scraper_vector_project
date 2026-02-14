@@ -1,7 +1,14 @@
 requests
 beautifulsoup4
-openai==0.28
+openai>=1.109.1
 psycopg2-binary
 tiktoken
 python-dotenv
 numpy
+
+# LangChain dependencies
+langchain
+langchain-openai
+langchain-community
+langchain-text-splitters
+pgvector
