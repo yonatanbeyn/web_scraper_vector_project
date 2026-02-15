@@ -8,6 +8,7 @@ numpy
 
 # LangChain dependencies
 langchain
+langgraph
 langchain-openai
 langchain-community
 langchain-text-splitters
